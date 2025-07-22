@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const indexRouter = require("./routes/index");
 const cors = require('cors');
+require('dotenv').config();
+const MONGODB_URI_PROD = process.env.MONGODB_URI_PROD;
 
 const app = express();
 // ✅ CORS 미들웨어를 제일 위에
@@ -14,7 +16,7 @@ app.use(bodyParser.json());
 // 라우터
 app.use("/api", indexRouter);
 
-const mongoURI = `mongodb://localhost:27017/todo-demo`;
+const mongoURI = MONGODB_URI_PROD;
 
 mongoose
   .connect(mongoURI, { useNewUrlParser: true })
@@ -25,6 +27,8 @@ mongoose
     console.log("DB connection fail", err);
   });
 
-app.listen(4000, () => {
-  console.log("server on 4000");
+const port = process.env.PORT || 4000;
+
+app.listen(port, () => {
+  console.log(`🚀 Server running on port ${port}`);
 });
