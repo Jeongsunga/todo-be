@@ -6,7 +6,12 @@ const userController = {};
 
 userController.createUser = async (req, res) => {
   try {
+
     const { email, name, password } = req.body;
+
+    if (!email || !name || !password) {
+      throw new Error("모든 정보를 입력해주세요.");
+    }
 
     const user = await User.findOne({ email });
     if (user) {
@@ -27,6 +32,11 @@ userController.createUser = async (req, res) => {
 userController.loginWithEmail = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+      throw new Error("모든 정보를 입력해주세요.");
+    }
+
     const user = await User.findOne({ email }, "-createdAt -updatedAt -__v");
     if (user) {
       const isMatch = await bcrypt.compare(password, user.password);
